@@ -1,15 +1,16 @@
 {
-  "name": "loop-stop-marketplace",
+  "name": "tokenguard-marketplace",
   "version": "0.1.0",
-  "description": "Local marketplace for Loop Stop — Coding Agent Token Guard (Claude Code plugin).",
+  "description": "TokenGuard marketplace — Claude Code plugin that blocks sticky tool loops locally (no base_url).",
   "owner": {
-    "name": "Loop Stop"
+    "name": "TokenGuard",
+    "email": "support@tokenguard.app"
   },
   "plugins": [
     {
-      "name": "loop-stop",
+      "name": "tokenguard",
       "source": "./claude-plugin",
-      "description": "Stops sticky coding-agent tool loops before they burn tokens (PreToolUse hook).",
+      "description": "TokenGuard PreToolUse hook — blocks sticky Read/Bash/Edit loops. One-command install; no URL pointing.",
       "version": "0.1.0"
     }
   ]

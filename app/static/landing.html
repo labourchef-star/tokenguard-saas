@@ -25,21 +25,20 @@
     <section class="hero">
       <div class="wrap hero-grid">
         <div>
-          <p class="eyebrow">Hosted SaaS · OpenAI-compatible proxy</p>
+          <p class="eyebrow">Claude Code plugin · one command · no URL config</p>
           <h1>Your agent just re-read the same file for the fifth time.</h1>
           <p class="lead">
-            Sticky loops burn tokens. TokenGuard is a hosted proxy that catches
-            repeated reads, failing bash, and tool ping-pong — then shows the
-            waste you avoided. Sign up once, get a <span class="mono">base_url</span>
-            and <span class="mono">tg_</span> API key.
+            Sticky loops burn tokens. TokenGuard installs as a Claude Code plugin
+            and blocks repeated reads, failing bash, and tool ping-pong locally —
+            <strong>no base_url</strong>, no proxy pointing.
           </p>
           <div class="cta-row">
-            <a class="btn primary" href="/signup">Sign up — get base URL</a>
-            <a class="btn" href="/signin">Sign in</a>
+            <a class="btn primary" href="/download">Install for Claude Code</a>
+            <a class="btn" href="/signup">Sign up (dashboard)</a>
             <a class="btn good" href="/app?demo=1">Try demo</a>
           </div>
           <p class="muted fine">
-            Free open signup for now. Demo is <strong>simulated</strong> — ~75% est. waste reduction, labeled honestly. No provider key required for demo.
+            Claude: one plugin command. Cursor / OpenAI clients: optional hosted <span class="mono">base_url</span> (advanced). Demo is <strong>simulated</strong>.
           </p>
         </div>
         <aside class="hero-card panel">
@@ -67,19 +66,25 @@
     </section>
 
     <section class="wrap" id="how">
-      <h2>One-click path</h2>
+      <h2>Claude Code — one command</h2>
+      <div class="panel" style="margin-bottom:16px;">
+        <p class="muted" style="margin-top:0;">In a Claude Code session (or use the shell form below):</p>
+        <pre style="white-space:pre-wrap;margin:0;">/plugin install tokenguard --marketplace labourchef-star/tokenguard-saas</pre>
+        <p class="muted fine" style="margin:12px 0 0;">Shell: <span class="mono">claude plugin install tokenguard --marketplace labourchef-star/tokenguard-saas</span></p>
+        <p class="muted fine">Installs a local PreToolUse hook. No <span class="mono">ANTHROPIC_BASE_URL</span>, no OpenAI base_url.</p>
+      </div>
       <div class="feature-grid">
         <div class="panel">
-          <strong>1. Sign up</strong>
-          <p class="muted">Email + password → straight into your dashboard.</p>
+          <strong>1. Run the install command</strong>
+          <p class="muted">Adds the GitHub marketplace and enables TokenGuard.</p>
         </div>
         <div class="panel">
-          <strong>2. Copy credentials</strong>
-          <p class="muted">Personal <span class="mono">https://HOST/v1</span> base URL + <span class="mono">tg_…</span> API key.</p>
+          <strong>2. Keep coding</strong>
+          <p class="muted">Sticky loops get blocked before they burn tokens.</p>
         </div>
         <div class="panel">
-          <strong>3. Point your client</strong>
-          <p class="muted">Claude Code / Continue / any OpenAI SDK — Bearer <span class="mono">tg_…</span>. Optional BYOK upstream key (encrypted).</p>
+          <strong>3. Optional dashboard</strong>
+          <p class="muted">Sign up later for impact charts — not required for Claude.</p>
         </div>
       </div>
     </section>
@@ -95,14 +100,14 @@
         </div>
         <div class="cta-row">
           <a class="btn good" href="/app?demo=1">Open demo dashboard</a>
-          <a class="btn primary" href="/signup">Sign up to get base URL</a>
+          <a class="btn primary" href="/download">Install Claude plugin</a>
         </div>
       </div>
     </section>
 
     <section class="wrap" id="auth-boxes">
       <h2>Sign up or sign in</h2>
-      <p class="muted">Create a hosted account — get your TokenGuard API key instantly.</p>
+      <p class="muted">Optional account for the hosted dashboard / Cursor base_url path. Claude users: prefer the plugin install above.</p>
       <div class="auth-grid">
         <form class="panel auth-box" method="post" action="/signup">
           <h3>Create account</h3>
@@ -136,13 +141,13 @@
           <a href="/integrations">Integrations →</a>
         </div>
         <div class="panel">
-          <strong>Claude Code</strong>
-          <p class="muted">Use the hosted proxy URL in your OpenAI-compatible settings, or the PreToolUse hook pointing at this host.</p>
-          <a href="/integrations">Integrations →</a>
+          <strong>Claude Code (primary)</strong>
+          <p class="muted">Plugin install — local PreToolUse hook. <strong>No base_url.</strong></p>
+          <a href="/download">Install command →</a>
         </div>
         <div class="panel">
           <strong>OpenAI-compatible</strong>
-          <p class="muted">Continue, Cline, scripts — any client with a custom base_url + Bearer tg_…</p>
+          <p class="muted">Advanced: custom base_url + Bearer tg_… after signup.</p>
           <a href="/integrations">Integrations →</a>
         </div>
       </div>

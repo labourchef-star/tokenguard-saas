@@ -2,7 +2,16 @@
 
 **v0.1.0** — 1-click hosted OpenAI-compatible proxy with loop-stop middleware and a token-waste impact dashboard.
 
-Sign up → get personal `base_url` (`https://HOST/v1`) + API key (`tg_…`) → point Claude Code / Continue / any OpenAI client.
+**Claude Code (primary):** one command — no base_url:
+
+```text
+/plugin install tokenguard --marketplace labourchef-star/tokenguard-saas
+```
+
+Shell: `claude plugin install tokenguard --marketplace labourchef-star/tokenguard-saas`  
+See [INSTALL_CLAUDE.md](INSTALL_CLAUDE.md).
+
+**Cursor / OpenAI-compatible (advanced):** Sign up → get personal `base_url` (`https://HOST/v1`) + API key (`tg_…`) → point your client.
 
 > Savings = **estimate** unless the provider returns `usage`.  
 > **Demo mode** = simulated FakeAgent sessions (~75% est.) — labeled simulated.  

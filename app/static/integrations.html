@@ -25,9 +25,10 @@
     <div id="gate" class="panel auth-box wide hidden">
       <h1>Sign in to finish integrations</h1>
       <p class="muted">Save BYOK upstream keys and copy your hosted credentials.
-        Demo mode still works without an account.</p>
+        Demo mode still works without an account. Claude plugin install needs no account.</p>
       <div class="cta-row">
-        <a class="btn primary" href="/signin?next=/integrations">Sign in</a>
+        <a class="btn primary" href="/download">Claude install (no signup)</a>
+        <a class="btn" href="/signin?next=/integrations">Sign in</a>
         <a class="btn" href="/signup?next=/integrations">Sign up</a>
         <a class="btn good" href="/app?demo=1">Try demo instead</a>
       </div>
@@ -35,10 +36,11 @@
 
     <div id="content" class="hidden">
       <h1>Connect your coding agent</h1>
-      <p class="muted">Hosted proxy — use these credentials in Claude Code / Continue / any OpenAI client.</p>
+      <p class="muted">Claude Code uses the <strong>plugin</strong> (no base_url). Credentials below are for Cursor / OpenAI-compatible clients and the optional dashboard.</p>
 
       <div class="panel" style="margin-bottom:16px;">
         <strong>Your hosted credentials</strong>
+        <p class="muted fine">For Cursor / OpenAI-compatible clients (advanced). Not required for Claude Code plugin.</p>
         <div class="form-row" style="grid-template-columns:160px 1fr;margin-top:12px;">
           <label>base_url</label>
           <div class="mono" id="cred-base">…</div>
@@ -51,9 +53,27 @@
       </div>
 
       <div class="integ-grid">
+        <section class="panel integ-card" id="card-claude">
+          <h2>Claude Code (primary — no URL)</h2>
+          <p class="muted">Install the plugin once. Local PreToolUse hook — <strong>no base_url</strong>, no <span class="mono">ANTHROPIC_BASE_URL</span>.</p>
+          <div class="config-box">
+            One command:
+            <pre id="snippet-claude">/plugin install tokenguard --marketplace labourchef-star/tokenguard-saas
+
+# Shell equivalent:
+claude plugin install tokenguard --marketplace labourchef-star/tokenguard-saas</pre>
+          </div>
+          <p class="muted fine">Optional later: this dashboard for impact charts. Not required for the hook.</p>
+          <label class="check-row">
+            <input type="checkbox" id="claude-hook" />
+            I have installed the TokenGuard Claude Code plugin
+          </label>
+          <button type="button" class="btn primary" id="btn-save-claude">Save</button>
+        </section>
+
         <section class="panel integ-card" id="card-grok">
           <h2>Grok / xAI (BYOK)</h2>
-          <p class="muted">Paste your xAI API key. Stored encrypted (Fernet / TOKENGUARD_SECRET). Never logged.</p>
+          <p class="muted">Paste your xAI API key. Stored encrypted (Fernet / TOKENGUARD_SECRET). Never logged. Advanced: point client base_url at hosted URL.</p>
           <ol class="muted">
             <li>Paste key below.</li>
             <li>Set client <span class="mono">base_url</span> to your hosted URL above.</li>
@@ -73,32 +93,9 @@ client = OpenAI(
           <button type="button" class="btn primary" id="btn-save-grok">Save key</button>
         </section>
 
-        <section class="panel integ-card" id="card-claude">
-          <h2>Claude Code</h2>
-          <p class="muted">Point OpenAI-compatible settings at the <strong>hosted</strong> URL (not localhost).</p>
-          <div class="config-box">
-            Env / settings:
-            <pre id="snippet-claude"># OpenAI-compatible base URL (hosted TokenGuard)
-export OPENAI_BASE_URL="https://HOST/v1"
-export OPENAI_API_KEY="tg_YOUR_KEY"
-
-# Optional PreToolUse hook that POSTs traces to hosted /v1/trace
-# (replace HOST with your PUBLIC_BASE_URL)
-curl -sS -X POST "$OPENAI_BASE_URL/../v1/trace" \
-  -H "Authorization: Bearer $OPENAI_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{"title":"hook","tool_events":[{"tool":"Read","args":{"path":"x"}}]}'</pre>
-          </div>
-          <label class="check-row">
-            <input type="checkbox" id="claude-hook" />
-            I’ve pointed Claude Code / hooks at the hosted URL
-          </label>
-          <button type="button" class="btn primary" id="btn-save-claude">Save</button>
-        </section>
-
         <section class="panel integ-card" id="card-openai">
-          <h2>OpenAI-compatible</h2>
-          <p class="muted">Continue, Cline, scripts — any client with a custom base_url.</p>
+          <h2>OpenAI-compatible (advanced)</h2>
+          <p class="muted">Continue, Cline, Cursor, scripts — any client with a custom base_url. Secondary to the Claude plugin path.</p>
           <label for="oa-base">Upstream provider URL (optional override)</label>
           <input id="oa-base" placeholder="https://api.x.ai/v1" />
           <label for="oa-key">Upstream API key (optional BYOK)</label>
@@ -113,6 +110,7 @@ curl -sS -X POST "$OPENAI_BASE_URL/../v1/trace" \
       <div class="panel" style="margin-top:8px;">
         <strong>Next</strong>
         <div class="cta-row" style="margin-top:12px;">
+          <a class="btn" href="/download">Claude install page</a>
           <a class="btn good" href="/app?demo=1">Seed demo (simulated 75% est.)</a>
           <a class="btn primary" href="/app">Open dashboard</a>
         </div>
@@ -144,16 +142,15 @@ r = client.chat.completions.create(
     model="grok-4.7",
     messages=[{"role":"user","content":"hi"}],
 )`;
+      // Keep Claude snippet as plugin install (no base_url). Fix typo below.
       $("#snippet-claude").textContent =
-`# OpenAI-compatible base URL (hosted TokenGuard)
-export OPENAI_BASE_URL="${base}"
-export OPENAI_API_KEY="${key}"
+`/plugin install tokenguard --marketplace labourchef-star/tokenguard-saas
 
-# Optional: POST tool traces to hosted TokenGuard
-curl -sS -X POST "${base.replace(/\\/v1$/, '')}/v1/trace" \\
-  -H "Authorization: Bearer ${key}" \\
-  -H "Content-Type: application/json" \\
-  -d '{"title":"hook","tool_events":[{"tool":"Read","args":{"path":"x"}}]}'`;
+# Shell equivalent:
+claude plugin install tokenguard --marketplace labourchef-star/tokenguard-saas
+
+# No base_url / ANTHROPIC_BASE_URL needed for Claude Code.
+# Optional dashboard (not required for the hook): ${base.replace(/\\/v1$/, "")}`;
     }
     async function boot() {
       const r = await fetch("/api/auth/me");
