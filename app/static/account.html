@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Account — TokenGuard</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="/">TokenGuard</a>
+      <nav class="topnav">
+        <a href="/integrations">Integrations</a>
+        <a href="/app">Dashboard</a>
+        <form method="post" action="/signout" style="display:inline;">
+          <button class="btn" type="submit">Sign out</button>
+        </form>
+      </nav>
+    </div>
+  </header>
+  <main class="wrap" style="padding-top:32px;">
+    <div class="panel auth-box wide">
+      <h1>Account</h1>
+      <p class="muted">Hosted TokenGuard account · billing mode: <span class="mono" id="billing">free</span></p>
+      <div class="form-row" style="grid-template-columns:140px 1fr;">
+        <label>Email</label>
+        <div class="mono" id="email">…</div>
+      </div>
+      <div class="form-row" style="grid-template-columns:140px 1fr;">
+        <label>Name</label>
+        <div id="name">…</div>
+      </div>
+      <div class="form-row" style="grid-template-columns:140px 1fr;">
+        <label>User id</label>
+        <div class="mono" id="uid">…</div>
+      </div>
+      <div class="form-row" style="grid-template-columns:140px 1fr;">
+        <label>base_url</label>
+        <div class="mono" id="base">…</div>
+      </div>
+      <div class="form-row" style="grid-template-columns:140px 1fr;">
+        <label>API key</label>
+        <div class="mono" id="apikey">…</div>
+      </div>
+      <div class="cta-row" style="margin-top:18px;">
+        <button type="button" class="btn" id="btn-rotate">Rotate API key</button>
+        <a class="btn primary" href="/integrations">Integrations</a>
+        <a class="btn" href="/app">Dashboard</a>
+      </div>
+    </div>
+  </main>
+  <div class="toast" id="toast"></div>
+  <script>
+    function toast(m) {
+      const el = document.getElementById("toast");
+      el.textContent = m; el.classList.add("show");
+      setTimeout(() => el.classList.remove("show"), 2800);
+    }
+    function paint(u) {
+      document.getElementById("email").textContent = u.email || "";
+      document.getElementById("name").textContent = u.name || "(none)";
+      document.getElementById("uid").textContent = u.id || "";
+      document.getElementById("billing").textContent = u.billing_mode || "free";
+      const c = u.credentials || {};
+      document.getElementById("base").textContent = c.base_url || "";
+      document.getElementById("apikey").textContent = c.api_key || u.api_key || "";
+    }
+    fetch("/api/auth/me").then(r => {
+      if (r.status === 401) { location.href = "/signin?next=/account"; return null; }
+      return r.json();
+    }).then(u => { if (u) paint(u); });
+    document.getElementById("btn-rotate").addEventListener("click", async () => {
+      if (!confirm("Rotate API key? Old tg_ keys stop working immediately.")) return;
+      const r = await fetch("/api/auth/rotate-key", { method: "POST" });
+      const d = await r.json();
+      if (!r.ok) { toast(d.detail || "Rotate failed"); return; }
+      document.getElementById("apikey").textContent = d.api_key;
+      toast("API key rotated");
+    });
+  </script>
+</body>
+</html>

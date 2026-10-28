@@ -1,0 +1,9 @@
+{
+  "id": "task_add_function",
+  "name": "Add clamp() function",
+  "description": "utils.py is missing clamp(x, lo, hi). Agent must add it so tests pass.",
+  "sticky_mode": "failing_pytest_retry",
+  "acceptance": "python -m pytest test_utils.py -q",
+  "source_file": "utils.py",
+  "fix_snippet": "def clamp(x, lo, hi):\n    return max(lo, min(hi, x))"
+}

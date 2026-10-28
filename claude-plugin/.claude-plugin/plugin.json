@@ -1,0 +1,8 @@
+{
+  "name": "loop-stop",
+  "version": "0.1.0",
+  "description": "Stops sticky coding-agent tool loops (repeated reads, failing bash, ping-pong) before they burn tokens. PreToolUse hook; pairs with the local Loop Stop dashboard.",
+  "author": {
+    "name": "Loop Stop"
+  }
+}

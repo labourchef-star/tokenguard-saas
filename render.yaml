@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: tokenguard-saas
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    healthCheckPath: /health
+    envVars:
+      - key: HOST
+        value: "0.0.0.0"
+      - key: PORT
+        value: "8080"
+      - key: DATA_DIR
+        value: /data
+      - key: BILLING_MODE
+        value: free
+      - key: TOKENGUARD_SECRET
+        generateValue: true
+      - key: PUBLIC_BASE_URL
+        sync: false
+      - key: XAI_API_KEY
+        sync: false
+disk:
+  name: tokenguard-data
+  mountPath: /data
+  sizeGB: 1

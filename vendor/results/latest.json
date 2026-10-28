@@ -1,0 +1,81 @@
+{
+  "mode": "simulated",
+  "api_spend_usd": 0.0,
+  "n_threshold": 3,
+  "tasks": [
+    {
+      "baseline": {
+        "task_id": "task_add_function",
+        "mode": "baseline",
+        "tool_call_count": 24,
+        "loop_events_blocked": 0,
+        "task_pass": false,
+        "wall_ms": 5492,
+        "simulated": true
+      },
+      "loop_stop": {
+        "task_id": "task_add_function",
+        "mode": "loop_stop",
+        "tool_call_count": 5,
+        "loop_events_blocked": 1,
+        "task_pass": true,
+        "wall_ms": 802,
+        "simulated": true
+      }
+    },
+    {
+      "baseline": {
+        "task_id": "task_broken_import",
+        "mode": "baseline",
+        "tool_call_count": 24,
+        "loop_events_blocked": 0,
+        "task_pass": false,
+        "wall_ms": 241,
+        "simulated": true
+      },
+      "loop_stop": {
+        "task_id": "task_broken_import",
+        "mode": "loop_stop",
+        "tool_call_count": 8,
+        "loop_events_blocked": 1,
+        "task_pass": true,
+        "wall_ms": 337,
+        "simulated": true
+      }
+    },
+    {
+      "baseline": {
+        "task_id": "task_off_by_one",
+        "mode": "baseline",
+        "tool_call_count": 24,
+        "loop_events_blocked": 0,
+        "task_pass": false,
+        "wall_ms": 171,
+        "simulated": true
+      },
+      "loop_stop": {
+        "task_id": "task_off_by_one",
+        "mode": "loop_stop",
+        "tool_call_count": 5,
+        "loop_events_blocked": 1,
+        "task_pass": true,
+        "wall_ms": 449,
+        "simulated": true
+      }
+    }
+  ],
+  "summary": {
+    "n_tasks": 3,
+    "baseline_passes": 0,
+    "loop_stop_passes": 3,
+    "pass_rate_baseline": 0.0,
+    "pass_rate_loop_stop": 1.0,
+    "total_tool_calls_baseline": 72,
+    "total_tool_calls_loop_stop": 18,
+    "total_loop_events_blocked": 3,
+    "falsifier": "OK",
+    "quality_falsifier_tripped": false
+  },
+  "generated_at": "2026-10-28T15:12:21+1300",
+  "note": "SIMULATED results from FakeAgent (no LLM API). Do not invent savings %. Label as simulated when presenting."
+}

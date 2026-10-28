@@ -1,0 +1,23 @@
+services:
+  tokenguard:
+    build: .
+    image: tokenguard-saas:local
+    ports:
+      - "${PORT:-8080}:8080"
+    environment:
+      HOST: "0.0.0.0"
+      PORT: "8080"
+      DATA_DIR: /data
+      BILLING_MODE: free
+      PUBLIC_BASE_URL: ${PUBLIC_BASE_URL:-http://127.0.0.1:8080}
+      TOKENGUARD_SECRET: ${TOKENGUARD_SECRET:-local-dev-secret-change-me}
+      XAI_API_KEY: ${XAI_API_KEY:-}
+      GROK_API_KEY: ${GROK_API_KEY:-}
+      DEFAULT_UPSTREAM: ${DEFAULT_UPSTREAM:-https://api.x.ai/v1}
+      DEFAULT_MODEL: ${DEFAULT_MODEL:-grok-4.7}
+    volumes:
+      - tokenguard_data:/data
+    restart: unless-stopped
+
+volumes:
+  tokenguard_data:

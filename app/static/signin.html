@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sign in — TokenGuard</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="/">TokenGuard</a>
+      <nav class="topnav">
+        <a href="/signup">Sign up</a>
+        <a class="btn good" href="/app?demo=1">Try demo</a>
+      </nav>
+    </div>
+  </header>
+  <main class="auth-page">
+    <form class="panel auth-box wide" method="post" action="/signin" id="signin-form">
+      <h1>Sign in</h1>
+      <p class="muted">Back to your TokenGuard dashboard and API key.</p>
+      <div id="err" class="form-error hidden"></div>
+      <input type="hidden" name="next" id="next" value="/app" />
+      <label for="email">Email</label>
+      <input id="email" name="email" type="email" required autocomplete="email" />
+      <label for="password">Password</label>
+      <input id="password" name="password" type="password" required autocomplete="current-password" />
+      <button class="btn primary" type="submit">Sign in</button>
+      <p class="muted fine">No account? <a href="/signup">Sign up</a>
+        · <a href="/app?demo=1">Skip to demo</a></p>
+    </form>
+  </main>
+  <script>
+    const params = new URLSearchParams(location.search);
+    const err = params.get("error");
+    if (err) {
+      const el = document.getElementById("err");
+      el.textContent = err;
+      el.classList.remove("hidden");
+    }
+    const next = params.get("next");
+    if (next) document.getElementById("next").value = next;
+  </script>
+</body>
+</html>

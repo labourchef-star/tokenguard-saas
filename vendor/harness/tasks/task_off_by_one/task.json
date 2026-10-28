@@ -1,0 +1,9 @@
+{
+  "id": "task_off_by_one",
+  "name": "Fix off-by-one in sum_range",
+  "description": "broken.py:sum_range uses range(1,n) instead of range(1,n+1). Agent must edit and pass pytest.",
+  "sticky_mode": "reread_then_wrong_edit",
+  "acceptance": "python -m pytest test_broken.py -q",
+  "source_file": "broken.py",
+  "fix_snippet": "for i in range(1, n+1):"
+}

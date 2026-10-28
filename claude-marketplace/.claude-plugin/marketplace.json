@@ -1,0 +1,16 @@
+{
+  "name": "loop-stop-marketplace",
+  "version": "0.1.0",
+  "description": "Sibling marketplace folder for Loop Stop. Prefer adding the retail repo root instead when possible.",
+  "owner": {
+    "name": "Loop Stop"
+  },
+  "plugins": [
+    {
+      "name": "loop-stop",
+      "source": "./../claude-plugin",
+      "description": "Stops sticky coding-agent tool loops before they burn tokens (PreToolUse hook).",
+      "version": "0.1.0"
+    }
+  ]
+}

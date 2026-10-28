@@ -1,0 +1,35 @@
+# fly launch --no-deploy  then: fly secrets set TOKENGUARD_SECRET=... PUBLIC_BASE_URL=https://YOURAPP.fly.dev
+app = "tokenguard-saas"
+primary_region = "sjc"
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  HOST = "0.0.0.0"
+  PORT = "8080"
+  DATA_DIR = "/data"
+  BILLING_MODE = "free"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  min_machines_running = 0
+
+  [[http_service.checks]]
+    interval = "30s"
+    timeout = "5s"
+    grace_period = "15s"
+    method = "GET"
+    path = "/health"
+
+[mounts]
+  source = "tokenguard_data"
+  destination = "/data"
+
+[[vm]]
+  memory = "512mb"
+  cpu_kind = "shared"
+  cpus = 1

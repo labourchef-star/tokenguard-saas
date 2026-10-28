@@ -1,0 +1,9 @@
+{
+  "id": "task_broken_import",
+  "name": "Repair broken import",
+  "description": "app.py imports mathy_typo instead of mathy. Sticky mode oscillates between two benign Bash echoes (ping/pong) until the detector blocks, then the agent applies the import fix.",
+  "sticky_mode": "ping_pong_read_run",
+  "acceptance": "python -m pytest test_app.py -q",
+  "source_file": "app.py",
+  "fix_snippet": "from mathy import square"
+}

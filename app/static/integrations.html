@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Integrations — TokenGuard</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="/">TokenGuard</a>
+      <nav class="topnav">
+        <a href="/app">Dashboard</a>
+        <a href="/account">Account</a>
+        <a class="btn" href="/signin" id="nav-signin">Sign in</a>
+        <form method="post" action="/signout" id="nav-signout" class="hidden" style="display:inline;">
+          <button class="btn" type="submit">Sign out</button>
+        </form>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap" style="padding-top:28px;">
+    <div id="gate" class="panel auth-box wide hidden">
+      <h1>Sign in to finish integrations</h1>
+      <p class="muted">Save BYOK upstream keys and copy your hosted credentials.
+        Demo mode still works without an account.</p>
+      <div class="cta-row">
+        <a class="btn primary" href="/signin?next=/integrations">Sign in</a>
+        <a class="btn" href="/signup?next=/integrations">Sign up</a>
+        <a class="btn good" href="/app?demo=1">Try demo instead</a>
+      </div>
+    </div>
+
+    <div id="content" class="hidden">
+      <h1>Connect your coding agent</h1>
+      <p class="muted">Hosted proxy — use these credentials in Claude Code / Continue / any OpenAI client.</p>
+
+      <div class="panel" style="margin-bottom:16px;">
+        <strong>Your hosted credentials</strong>
+        <div class="form-row" style="grid-template-columns:160px 1fr;margin-top:12px;">
+          <label>base_url</label>
+          <div class="mono" id="cred-base">…</div>
+        </div>
+        <div class="form-row" style="grid-template-columns:160px 1fr;">
+          <label>API key</label>
+          <div class="mono" id="cred-key">…</div>
+        </div>
+        <p class="muted fine">Authorization: <span class="mono" id="cred-auth">Bearer tg_…</span></p>
+      </div>
+
+      <div class="integ-grid">
+        <section class="panel integ-card" id="card-grok">
+          <h2>Grok / xAI (BYOK)</h2>
+          <p class="muted">Paste your xAI API key. Stored encrypted (Fernet / TOKENGUARD_SECRET). Never logged.</p>
+          <ol class="muted">
+            <li>Paste key below.</li>
+            <li>Set client <span class="mono">base_url</span> to your hosted URL above.</li>
+            <li>Set client API key to your <span class="mono">tg_…</span> TokenGuard key.</li>
+          </ol>
+          <label for="grok-key">Upstream API key</label>
+          <input id="grok-key" type="password" placeholder="xai-…" autocomplete="off" />
+          <p class="muted fine" id="grok-status">Status: …</p>
+          <div class="config-box">
+            Python example:
+            <pre id="snippet-grok">from openai import OpenAI
+client = OpenAI(
+    base_url="https://HOST/v1",
+    api_key="tg_YOUR_KEY",
+)</pre>
+          </div>
+          <button type="button" class="btn primary" id="btn-save-grok">Save key</button>
+        </section>
+
+        <section class="panel integ-card" id="card-claude">
+          <h2>Claude Code</h2>
+          <p class="muted">Point OpenAI-compatible settings at the <strong>hosted</strong> URL (not localhost).</p>
+          <div class="config-box">
+            Env / settings:
+            <pre id="snippet-claude"># OpenAI-compatible base URL (hosted TokenGuard)
+export OPENAI_BASE_URL="https://HOST/v1"
+export OPENAI_API_KEY="tg_YOUR_KEY"
+
+# Optional PreToolUse hook that POSTs traces to hosted /v1/trace
+# (replace HOST with your PUBLIC_BASE_URL)
+curl -sS -X POST "$OPENAI_BASE_URL/../v1/trace" \
+  -H "Authorization: Bearer $OPENAI_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"title":"hook","tool_events":[{"tool":"Read","args":{"path":"x"}}]}'</pre>
+          </div>
+          <label class="check-row">
+            <input type="checkbox" id="claude-hook" />
+            I’ve pointed Claude Code / hooks at the hosted URL
+          </label>
+          <button type="button" class="btn primary" id="btn-save-claude">Save</button>
+        </section>
+
+        <section class="panel integ-card" id="card-openai">
+          <h2>OpenAI-compatible</h2>
+          <p class="muted">Continue, Cline, scripts — any client with a custom base_url.</p>
+          <label for="oa-base">Upstream provider URL (optional override)</label>
+          <input id="oa-base" placeholder="https://api.x.ai/v1" />
+          <label for="oa-key">Upstream API key (optional BYOK)</label>
+          <input id="oa-key" type="password" placeholder="sk-… / xai-…" autocomplete="off" />
+          <p class="muted fine" id="oa-status">Status: …</p>
+          <p class="muted fine">Client base_url stays your hosted
+            <span class="mono" id="oa-proxy-hint">https://HOST/v1</span>.</p>
+          <button type="button" class="btn primary" id="btn-save-openai">Save</button>
+        </section>
+      </div>
+
+      <div class="panel" style="margin-top:8px;">
+        <strong>Next</strong>
+        <div class="cta-row" style="margin-top:12px;">
+          <a class="btn good" href="/app?demo=1">Seed demo (simulated 75% est.)</a>
+          <a class="btn primary" href="/app">Open dashboard</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div class="toast" id="toast"></div>
+  <script>
+    const $ = (s) => document.querySelector(s);
+    function toast(m) {
+      const el = $("#toast");
+      el.textContent = m;
+      el.classList.add("show");
+      setTimeout(() => el.classList.remove("show"), 2800);
+    }
+    function fillSnippets(base, key) {
+      $("#cred-base").textContent = base;
+      $("#cred-key").textContent = key;
+      $("#cred-auth").textContent = "Bearer " + key;
+      $("#oa-proxy-hint").textContent = base;
+      $("#snippet-grok").textContent =
+`from openai import OpenAI
+client = OpenAI(
+    base_url="${base}",
+    api_key="${key}",
+)
+r = client.chat.completions.create(
+    model="grok-4.7",
+    messages=[{"role":"user","content":"hi"}],
+)`;
+      $("#snippet-claude").textContent =
+`# OpenAI-compatible base URL (hosted TokenGuard)
+export OPENAI_BASE_URL="${base}"
+export OPENAI_API_KEY="${key}"
+
+# Optional: POST tool traces to hosted TokenGuard
+curl -sS -X POST "${base.replace(/\\/v1$/, '')}/v1/trace" \\
+  -H "Authorization: Bearer ${key}" \\
+  -H "Content-Type: application/json" \\
+  -d '{"title":"hook","tool_events":[{"tool":"Read","args":{"path":"x"}}]}'`;
+    }
+    async function boot() {
+      const r = await fetch("/api/auth/me");
+      if (r.status === 401) {
+        $("#gate").classList.remove("hidden");
+        return;
+      }
+      const me = await r.json();
+      $("#content").classList.remove("hidden");
+      $("#nav-signin").classList.add("hidden");
+      $("#nav-signout").classList.remove("hidden");
+      const creds = me.credentials || {};
+      fillSnippets(creds.base_url || "https://HOST/v1", creds.api_key || me.api_key || "tg_…");
+      const s = await fetch("/api/integrations").then((x) => x.json());
+      $("#grok-status").textContent = s.grok_key_set
+        ? `Status: saved (${s.grok_key_masked})`
+        : "Status: not set (demo still works)";
+      $("#oa-status").textContent = s.openai_key_set
+        ? `Status: saved (${s.openai_key_masked})`
+        : "Status: not set";
+      $("#oa-base").value = s.openai_base_url || "";
+      $("#claude-hook").checked = !!s.claude_hook_installed;
+      if (s.proxy_base_url) fillSnippets(s.proxy_base_url, s.api_key || creds.api_key || "tg_…");
+    }
+    $("#btn-save-grok").addEventListener("click", async () => {
+      const key = $("#grok-key").value.trim();
+      const r = await fetch("/api/integrations", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ grok_api_key: key || null, clear_grok: !key }),
+      });
+      if (!r.ok) { toast((await r.json()).detail || "Save failed"); return; }
+      $("#grok-key").value = "";
+      toast("Upstream key encrypted & saved");
+      boot();
+    });
+    $("#btn-save-claude").addEventListener("click", async () => {
+      const r = await fetch("/api/integrations", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ claude_hook_installed: $("#claude-hook").checked }),
+      });
+      if (!r.ok) { toast("Save failed"); return; }
+      toast("Claude Code preference saved");
+    });
+    $("#btn-save-openai").addEventListener("click", async () => {
+      const key = $("#oa-key").value.trim();
+      const r = await fetch("/api/integrations", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          openai_api_key: key || null,
+          clear_openai: !key,
+          openai_base_url: $("#oa-base").value.trim(),
+        }),
+      });
+      if (!r.ok) { toast((await r.json()).detail || "Save failed"); return; }
+      $("#oa-key").value = "";
+      toast("OpenAI-compatible settings saved");
+      boot();
+    });
+    boot();
+  </script>
+</body>
+</html>

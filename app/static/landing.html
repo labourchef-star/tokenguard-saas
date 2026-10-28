@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TokenGuard — Coding Agent Token Guard</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="/">TokenGuard</a>
+      <nav class="topnav">
+        <a href="/#how">How it works</a>
+        <a href="/#demo">Demo</a>
+        <a href="/integrations">Integrations</a>
+        <a href="/app">Dashboard</a>
+        <a class="btn" href="/signin">Sign in</a>
+        <a class="btn primary" href="/signup">Sign up</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div>
+          <p class="eyebrow">Hosted SaaS · OpenAI-compatible proxy</p>
+          <h1>Your agent just re-read the same file for the fifth time.</h1>
+          <p class="lead">
+            Sticky loops burn tokens. TokenGuard is a hosted proxy that catches
+            repeated reads, failing bash, and tool ping-pong — then shows the
+            waste you avoided. Sign up once, get a <span class="mono">base_url</span>
+            and <span class="mono">tg_</span> API key.
+          </p>
+          <div class="cta-row">
+            <a class="btn primary" href="/signup">Sign up — get base URL</a>
+            <a class="btn" href="/signin">Sign in</a>
+            <a class="btn good" href="/app?demo=1">Try demo</a>
+          </div>
+          <p class="muted fine">
+            Free open signup for now. Demo is <strong>simulated</strong> — ~75% est. waste reduction, labeled honestly. No provider key required for demo.
+          </p>
+        </div>
+        <aside class="hero-card panel">
+          <div class="badge demo">simulated demo</div>
+          <div class="metric" style="margin-top:12px;">
+            <div class="label">Est. waste reduction</div>
+            <div class="value accent">75%</div>
+            <div class="hint">From seeded FakeAgent sticky sessions — labeled estimate</div>
+          </div>
+          <div class="cmp" style="margin-top:14px;">
+            <div class="metric">
+              <div class="label">Baseline tools</div>
+              <div class="value" style="font-size:1.4rem;">72</div>
+            </div>
+            <div class="metric">
+              <div class="label">With TokenGuard</div>
+              <div class="value" style="font-size:1.4rem;">18</div>
+            </div>
+          </div>
+          <p class="muted fine" style="margin:14px 0 0;">
+            Savings = <span class="badge est">estimate</span> unless your provider returns usage.
+          </p>
+        </aside>
+      </div>
+    </section>
+
+    <section class="wrap" id="how">
+      <h2>One-click path</h2>
+      <div class="feature-grid">
+        <div class="panel">
+          <strong>1. Sign up</strong>
+          <p class="muted">Email + password → straight into your dashboard.</p>
+        </div>
+        <div class="panel">
+          <strong>2. Copy credentials</strong>
+          <p class="muted">Personal <span class="mono">https://HOST/v1</span> base URL + <span class="mono">tg_…</span> API key.</p>
+        </div>
+        <div class="panel">
+          <strong>3. Point your client</strong>
+          <p class="muted">Claude Code / Continue / any OpenAI SDK — Bearer <span class="mono">tg_…</span>. Optional BYOK upstream key (encrypted).</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap" id="demo">
+      <div class="panel demo-banner">
+        <div>
+          <h2 style="margin:0 0 8px;">See it without a key</h2>
+          <p class="muted" style="margin:0;">
+            Demo mode seeds simulated sticky sessions so Impact shows ~75% est. waste reduction.
+            Labeled <strong>simulated</strong> — not live traffic.
+          </p>
+        </div>
+        <div class="cta-row">
+          <a class="btn good" href="/app?demo=1">Open demo dashboard</a>
+          <a class="btn primary" href="/signup">Sign up to get base URL</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap" id="auth-boxes">
+      <h2>Sign up or sign in</h2>
+      <p class="muted">Create a hosted account — get your TokenGuard API key instantly.</p>
+      <div class="auth-grid">
+        <form class="panel auth-box" method="post" action="/signup">
+          <h3>Create account</h3>
+          <label for="su-name">Name (optional)</label>
+          <input id="su-name" name="name" autocomplete="name" />
+          <label for="su-email">Email</label>
+          <input id="su-email" name="email" type="email" required autocomplete="email" />
+          <label for="su-pass">Password</label>
+          <input id="su-pass" name="password" type="password" required minlength="6" autocomplete="new-password" />
+          <button class="btn primary" type="submit">Sign up — get base URL</button>
+          <p class="muted fine">After signup → Dashboard with credentials.</p>
+        </form>
+        <form class="panel auth-box" method="post" action="/signin">
+          <h3>Sign in</h3>
+          <label for="si-email">Email</label>
+          <input id="si-email" name="email" type="email" required autocomplete="email" />
+          <label for="si-pass">Password</label>
+          <input id="si-pass" name="password" type="password" required autocomplete="current-password" />
+          <button class="btn primary" type="submit">Sign in</button>
+          <p class="muted fine"><a href="/app?demo=1">Skip — try demo</a></p>
+        </form>
+      </div>
+    </section>
+
+    <section class="wrap">
+      <h2>Connect your agent</h2>
+      <div class="feature-grid">
+        <div class="panel">
+          <strong>Grok / xAI</strong>
+          <p class="muted">Paste BYOK key (Fernet-encrypted). Point base_url at your hosted <span class="mono">/v1</span>.</p>
+          <a href="/integrations">Integrations →</a>
+        </div>
+        <div class="panel">
+          <strong>Claude Code</strong>
+          <p class="muted">Use the hosted proxy URL in your OpenAI-compatible settings, or the PreToolUse hook pointing at this host.</p>
+          <a href="/integrations">Integrations →</a>
+        </div>
+        <div class="panel">
+          <strong>OpenAI-compatible</strong>
+          <p class="muted">Continue, Cline, scripts — any client with a custom base_url + Bearer tg_…</p>
+          <a href="/integrations">Integrations →</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap muted fine">
+      TokenGuard · hosted SaaS · billing=free MVP ·
+      <a href="/app">Dashboard</a> ·
+      <a href="/account">Account</a> ·
+      savings labeled estimate / demo labeled simulated
+    </div>
+  </footer>
+</body>
+</html>

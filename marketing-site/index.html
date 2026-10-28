@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TokenGuard — Stop coding agents from burning tokens in sticky loops</title>
+  <meta name="description" content="Local-first token guard for Claude Code, Grok, and OpenAI-compatible agents. Blocks sticky Read/Bash loops. Demo shows ~75% est. waste reduction (simulated)." />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <a class="brand" href="index.html">TokenGuard</a>
+      <nav class="topnav">
+        <a href="index.html#problem">Problem</a>
+        <a href="how-it-works.html">How it works</a>
+        <a href="pricing.html">Pricing</a>
+        <a href="index.html#faq">FAQ</a>
+        <a class="btn primary" href="GUMROAD_URL">Buy on Gumroad</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <p class="eyebrow">Coding Agent Token Guard · local-first</p>
+        <h1>Your agent re-read the same file five times. Who paid for that?</h1>
+        <p class="lead">
+          Sticky loops — repeated reads, failing bash, tool ping-pong — quietly burn
+          tokens. TokenGuard runs on your machine, catches the pattern, and shows the
+          waste you avoided.
+        </p>
+        <div class="cta-row">
+          <a class="btn primary" href="GUMROAD_URL">Buy &amp; download — $19</a>
+          <a class="btn" href="how-it-works.html">See how it works</a>
+          <a class="btn ghost" href="APP_DEMO_URL">Local demo (after install)</a>
+        </div>
+        <p class="muted fine">
+          Not a hosted SaaS. Install once. Savings are <strong>estimates</strong> unless
+          your provider returns usage. Demo = <strong>simulated</strong>.
+        </p>
+      </div>
+      <aside class="panel">
+        <span class="badge">simulated demo proof</span>
+        <div class="metric" style="margin-top:12px;">
+          <div class="label">Est. waste reduction</div>
+          <div class="value">75%</div>
+          <div class="hint">Seeded FakeAgent sticky sessions — labeled estimate, $0</div>
+        </div>
+        <div class="cmp">
+          <div class="metric">
+            <div class="label">Baseline tool calls</div>
+            <div class="value">72</div>
+          </div>
+          <div class="metric">
+            <div class="label">With TokenGuard</div>
+            <div class="value">18</div>
+          </div>
+        </div>
+        <p class="muted fine" style="margin:14px 0 0;">
+          Honest label: <span class="badge est">estimate</span> — not a dollar guarantee.
+        </p>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section" id="problem">
+    <div class="wrap">
+      <h2>What burns tokens while you watch</h2>
+      <div class="grid3" style="margin-top:16px;">
+        <div class="panel">
+          <h3>Sticky Read loops</h3>
+          <p>Same file, same offset — again. The agent “checks once more.” The meter keeps spinning.</p>
+        </div>
+        <div class="panel">
+          <h3>Compile / bash fail loops</h3>
+          <p>Command fails. Agent retries the identical command. Fail. Retry. Fail. Budget gone.</p>
+        </div>
+        <div class="panel">
+          <h3>Tool ping-pong</h3>
+          <p>Two tools bounce the same args. TokenGuard notices and can block before the next round.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="banner">
+        <div>
+          <h2 style="margin:0 0 8px;">Built for coding-agent users</h2>
+          <p class="muted" style="margin:0;max-width:40em;">
+            Beachhead: Claude Code + Grok / OpenAI-compatible clients. Paste a key or install a hook.
+            Point <span class="mono">base_url</span> at your local proxy.
+          </p>
+        </div>
+        <a class="btn primary" href="how-it-works.html">Integrations overview</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="faq">
+    <div class="wrap faq">
+      <h2>FAQ</h2>
+      <details open>
+        <summary>Is the 75% number real traffic?</summary>
+        <p>No. It comes from a <strong>simulated</strong> Demo mode that seeds sticky FakeAgent sessions.
+          Live savings depend on your traffic and are labeled <strong>estimate</strong> unless the provider returns usage.</p>
+      </details>
+      <details>
+        <summary>Is this a cloud product?</summary>
+        <p>No. TokenGuard is local-first: install on your machine (or a VPS you control). Accounts can be local SQLite.
+          You can put HTTPS in front; there is no built-in SaaS billing.</p>
+      </details>
+      <details>
+        <summary>Which agents work?</summary>
+        <p>Grok / xAI via OpenAI-compatible proxy, Claude Code via PreToolUse hook/plugin, and any client that accepts a custom base_url (Continue, Cline, scripts).</p>
+      </details>
+      <details>
+        <summary>Do you store my API keys in the cloud?</summary>
+        <p>Keys stay on the machine running the app (env or local opaque storage). They are never logged.</p>
+      </details>
+      <details>
+        <summary>How do I get it?</summary>
+        <p>Buy and download on <a href="GUMROAD_URL">Gumroad</a> → unpack the zip → run
+          <span class="mono">./install.sh</span> → open
+          <span class="mono">http://127.0.0.1:8788</span>. Then connect Integrations or try Demo mode.</p>
+      </details>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap" style="text-align:center;">
+      <h2>Stop paying for the same mistake twice</h2>
+      <div class="cta-row" style="justify-content:center;">
+        <a class="btn primary" href="GUMROAD_URL">Buy on Gumroad — $19</a>
+        <a class="btn" href="pricing.html">Pricing</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap">
+      TokenGuard — Coding Agent Token Guard · local-first ·
+      <a href="how-it-works.html">How it works</a> ·
+      <a href="pricing.html">Pricing</a> ·
+      <a href="GUMROAD_URL">Gumroad</a>
+    </div>
+  </footer>
+  <script src="config.js"></script>
+</body>
+</html>

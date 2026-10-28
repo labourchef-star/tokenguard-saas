@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TokenGuard — Dashboard</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <div id="onboarding" class="onboarding hidden">
+    <div class="ob-card">
+      <div class="ob-steps" id="ob-steps"></div>
+
+      <section class="ob-panel" data-step="welcome">
+        <h1>Welcome to TokenGuard</h1>
+        <p class="lead">
+          Hosted OpenAI-compatible proxy that watches coding-agent tool calls, stops sticky loops
+          (repeated reads, failing bash, ping-pong), and shows estimated token waste avoided.
+        </p>
+        <ul class="plain">
+          <li>Sign up → get personal <span class="mono">base_url</span> + <span class="mono">tg_</span> key</li>
+          <li>Savings are <strong>estimates</strong> unless your provider returns usage</li>
+          <li>Demo mode is <strong>simulated</strong> (~75% est., $0, no API key needed)</li>
+        </ul>
+        <button type="button" class="btn primary" id="ob-start">Get started</button>
+      </section>
+
+      <section class="ob-panel hidden" data-step="client">
+        <h1>How will you connect?</h1>
+        <p class="muted">Pick the client you use today. You can change this later.</p>
+        <div class="client-grid">
+          <button type="button" class="client-card" data-client="grok_api">
+            <strong>Grok / xAI API</strong>
+            <span>Point any OpenAI-compatible SDK at your hosted TokenGuard base_url with tg_ key + optional BYOK.</span>
+          </button>
+          <button type="button" class="client-card" data-client="claude_code">
+            <strong>Claude Code</strong>
+            <span>Point OpenAI-compatible settings at the hosted URL (not localhost).</span>
+          </button>
+          <button type="button" class="client-card" data-client="openai_compatible">
+            <strong>OpenAI-compatible client</strong>
+            <span>Continue, Cline, scripts — custom base_url + Bearer tg_…</span>
+          </button>
+        </div>
+      </section>
+
+      <section class="ob-panel hidden" data-step="config">
+        <h1>Your hosted credentials</h1>
+        <div id="config-body"></div>
+        <div class="ob-actions">
+          <button type="button" class="btn" id="ob-back-client">Back</button>
+          <button type="button" class="btn good" id="ob-try-demo">Try Demo mode</button>
+          <button type="button" class="btn primary" id="ob-finish">Open dashboard</button>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div id="app" class="wrap hidden">
+    <header>
+      <div>
+        <h1>TokenGuard</h1>
+        <div class="sub">Hosted proxy · loop detector · token waste dashboard · <a href="/">Home</a></div>
+      </div>
+      <nav>
+        <button type="button" data-view="impact" class="active">Impact</button>
+        <button type="button" data-view="sessions">Sessions</button>
+        <button type="button" data-view="settings">Settings</button>
+        <button type="button" id="btn-demo" class="btn good">Demo mode</button>
+        <a class="btn" href="/integrations">Integrations</a>
+        <a class="btn" href="/account" id="nav-account">Account</a>
+        <button type="button" id="btn-redo-onboard" class="btn" title="Replay setup">Setup</button>
+      </nav>
+    </header>
+
+    <section id="cred-banner" class="panel hidden" style="margin-bottom:14px;">
+      <strong>Your personal OpenAI-compatible endpoint</strong>
+      <div class="form-row" style="grid-template-columns:120px 1fr;margin-top:10px;">
+        <label>base_url</label>
+        <div class="mono" id="dash-base">…</div>
+      </div>
+      <div class="form-row" style="grid-template-columns:120px 1fr;">
+        <label>API key</label>
+        <div class="mono" id="dash-key">…</div>
+      </div>
+      <p class="muted fine" style="margin:8px 0 0;">
+        Point Claude Code / Continue / any OpenAI client here.
+        Paste optional upstream provider key on <a href="/integrations">Integrations</a>.
+        Demo works without a provider key (simulated ~75% — labeled).
+      </p>
+    </section>
+
+    <section id="view-impact">
+      <div class="panel">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px;">
+          <div>
+            <strong>Impact on token waste</strong>
+            <div class="muted" style="font-size:0.85rem;margin-top:4px;">
+              Aggregates your sessions. Estimates are labeled.
+            </div>
+          </div>
+          <span id="impact-honesty" class="badge est">estimates labeled</span>
+        </div>
+        <div class="grid" id="impact-metrics"></div>
+      </div>
+      <div class="panel">
+        <strong>Before vs with-stop (tool calls)</strong>
+        <div class="cmp" style="margin-top:12px;">
+          <div class="metric">
+            <div class="label">Baseline tool calls</div>
+            <div class="value" id="cmp-baseline">—</div>
+            <div class="hint">Without TokenGuard (demo / recorded)</div>
+          </div>
+          <div class="metric">
+            <div class="label">With TokenGuard</div>
+            <div class="value" id="cmp-stop">—</div>
+            <div class="hint">After blocking repeated loops</div>
+          </div>
+        </div>
+        <div class="chart" id="impact-chart" style="margin-top:18px;"></div>
+      </div>
+      <div class="panel">
+        <strong>Recent sessions</strong>
+        <div id="impact-recent" class="muted" style="margin-top:10px;">Loading…</div>
+      </div>
+    </section>
+
+    <section id="view-sessions" class="hidden">
+      <div class="panel">
+        <strong>Sessions</strong>
+        <div id="sessions-list" style="margin-top:10px;">Loading…</div>
+      </div>
+      <div class="panel hidden" id="session-detail-panel">
+        <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+          <strong id="session-detail-title">Session</strong>
+          <button type="button" class="btn" id="btn-back-sessions">Back to list</button>
+        </div>
+        <div id="session-detail-meta" class="muted" style="margin:8px 0 12px;"></div>
+        <ul class="timeline" id="session-timeline"></ul>
+      </div>
+    </section>
+
+    <section id="view-settings" class="hidden">
+      <div class="panel">
+        <strong>Settings</strong>
+        <p class="muted" style="margin-top:8px;">
+          Per-user upstream keys live on <a href="/integrations">Integrations</a> (encrypted).
+          Loop threshold below is process-wide.
+        </p>
+        <div class="form-row">
+          <label for="upstream">Default upstream base URL</label>
+          <input id="upstream" placeholder="https://api.x.ai/v1" />
+        </div>
+        <div class="form-row">
+          <label for="model">Default model</label>
+          <input id="model" placeholder="grok-4.7" />
+        </div>
+        <div class="form-row">
+          <label for="loop_n">Loop threshold N</label>
+          <input id="loop_n" type="number" min="2" max="20" />
+        </div>
+        <div class="form-row">
+          <label for="block_loops">Block loops</label>
+          <select id="block_loops">
+            <option value="true">Block (enforce)</option>
+            <option value="false">Annotate only</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label>Server env key</label>
+          <div id="key-status" class="mono">…</div>
+        </div>
+        <button type="button" class="btn primary" id="btn-save-settings">Save settings</button>
+      </div>
+      <div class="panel">
+        <strong>Point your client here</strong>
+        <ol class="muted" id="settings-point-here">
+          <li>Copy your <span class="mono">base_url</span> and <span class="mono">tg_</span> key from the banner above.</li>
+          <li>Optional: paste xAI/OpenAI BYOK on Integrations (encrypted at rest).</li>
+          <li>Demo mode seeds simulated sticky sessions without any provider key.</li>
+        </ol>
+      </div>
+    </section>
+  </div>
+  <div class="toast" id="toast"></div>
+  <script src="/static/app.js"></script>
+</body>
+</html>
