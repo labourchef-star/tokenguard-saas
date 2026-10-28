@@ -19,7 +19,7 @@
   <main class="auth-page">
     <form class="panel auth-box wide" method="post" action="/signup" id="signup-form">
       <h1>Create your TokenGuard account</h1>
-      <p class="muted">One click into your dashboard with a personal base_url and <span class="mono">tg_</span> API key. Free for now.</p>
+      <p class="muted">Optional for Claude Code users (prefer the <a href="/download">plugin install</a>). Dashboard + base_url for Cursor / OpenAI clients. Free for now.</p>
       <div id="err" class="form-error hidden"></div>
       <label for="name">Name (optional)</label>
       <input id="name" name="name" autocomplete="name" />
@@ -27,7 +27,7 @@
       <input id="email" name="email" type="email" required autocomplete="email" />
       <label for="password">Password (min 6)</label>
       <input id="password" name="password" type="password" required minlength="6" autocomplete="new-password" />
-      <button class="btn primary" type="submit">Sign up — get base URL</button>
+      <button class="btn primary" type="submit">Sign up — open dashboard</button>
       <p class="muted fine">Already have an account? <a href="/signin">Sign in</a>
         · or <a href="/app?demo=1">try demo without signing up</a></p>
     </form>

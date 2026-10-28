@@ -94,15 +94,17 @@ function configCopy(client) {
   const key = creds.api_key || "tg_YOUR_KEY";
   if (client === "claude_code") {
     return {
-      title: "Claude Code → hosted TokenGuard",
+      title: "Claude Code → TokenGuard plugin (no URL)",
       html: `
-        <p>Point OpenAI-compatible settings at the <strong>hosted</strong> URL (not localhost):</p>
+        <p>One command. Local PreToolUse hook — <strong>no base_url</strong>, no <span class="mono">ANTHROPIC_BASE_URL</span>.</p>
         <div class="config-box">
-          <pre>export OPENAI_BASE_URL="${base}"
-export OPENAI_API_KEY="${key}"</pre>
+          <pre>/plugin install tokenguard --marketplace labourchef-star/tokenguard-saas
+
+# Shell:
+claude plugin install tokenguard --marketplace labourchef-star/tokenguard-saas</pre>
           <p style="margin:10px 0 0" class="muted">
-            Optional: paste an upstream xAI/OpenAI key on
-            <a href="/integrations">Integrations</a> (encrypted). Demo works without it.
+            This dashboard is optional for impact charts.
+            See <a href="/download">/download</a>. Cursor / OpenAI clients use base_url (advanced).
           </p>
         </div>`,
     };

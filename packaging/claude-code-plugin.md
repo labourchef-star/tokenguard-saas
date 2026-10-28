@@ -1,48 +1,48 @@
-# Claude Code plugin — exact paths and install commands
+# Claude Code plugin — one-command install
 
 **Do not submit to Anthropic’s directory without human approval.**
 
-## Layout (ships in this retail tree)
+## Primary install (GitHub marketplace)
+
+One command. No `base_url`, no `ANTHROPIC_BASE_URL`, no proxy pointing.
+
+In a Claude Code session:
+
+```text
+/plugin install tokenguard --marketplace labourchef-star/tokenguard-saas
+```
+
+From your shell (Claude Code CLI v2.1.292+):
+
+```bash
+claude plugin install tokenguard --marketplace labourchef-star/tokenguard-saas
+```
+
+What happens: Claude Code adds the GitHub marketplace (repo root `.claude-plugin/marketplace.json`), installs the `tokenguard` plugin, and enables the PreToolUse hook. Sticky Read/Bash/Edit loops are blocked locally.
+
+## Layout (this repo = marketplace root)
 
 ```
-loop-stop-retail/
+tokenguard-saas/                         # GitHub: labourchef-star/tokenguard-saas
+  .claude-plugin/marketplace.json        # name: tokenguard-marketplace; source ./claude-plugin
   claude-plugin/                         # the plugin
-    .claude-plugin/plugin.json           # name: loop-stop, v0.1.0
+    .claude-plugin/plugin.json           # name: tokenguard
     hooks/hooks.json                     # PreToolUse → scripts/pre_tool_use.sh
     scripts/pre_tool_use.sh              # invokes vendor/loop_stop detector
-    vendor/loop_stop/                    # bundled detector (self-contained)
+    vendor/loop_stop/                    # bundled detector (internal module name unchanged)
     skills/about/SKILL.md
-  .claude-plugin/marketplace.json        # marketplace root = this retail folder
-  claude-marketplace/.claude-plugin/marketplace.json   # sibling alt (source ../claude-plugin)
+  claude-marketplace/                    # optional sibling; prefer repo root
+  INSTALL_CLAUDE.md
 ```
 
-Standalone retail hook (dashboard install path, not the plugin): `hooks/pre_tool_use.sh`.
-
-## Install from a local checkout (no publish needed)
-
-Prefer adding the **retail repo root** as the marketplace (it contains `.claude-plugin/marketplace.json`):
+## Local checkout (dev)
 
 ```bash
-# From any shell where `claude` CLI is available:
-claude plugin marketplace add /absolute/path/to/loop-stop-retail
-claude plugin install loop-stop@loop-stop-marketplace
+claude plugin marketplace add /absolute/path/to/tokenguard-saas
+claude plugin install tokenguard@tokenguard-marketplace
 
-# Or enable from inside a Claude Code session:
-# /plugin marketplace add /absolute/path/to/loop-stop-retail
-# /plugin install loop-stop@loop-stop-marketplace
-```
-
-Sibling marketplace folder (same plugin):
-
-```bash
-claude plugin marketplace add /absolute/path/to/loop-stop-retail/claude-marketplace
-claude plugin install loop-stop@loop-stop-marketplace
-```
-
-Load without a marketplace (dev):
-
-```bash
-claude --plugin-dir /absolute/path/to/loop-stop-retail/claude-plugin
+# Or load without marketplace:
+claude --plugin-dir /absolute/path/to/tokenguard-saas/claude-plugin
 ```
 
 ## Settings.json fallback (no plugin system)
@@ -54,7 +54,7 @@ claude --plugin-dir /absolute/path/to/loop-stop-retail/claude-plugin
       "matcher": "Read|Bash|Edit|Write",
       "hooks": [{
         "type": "command",
-        "command": "/absolute/path/to/loop-stop-retail/hooks/pre_tool_use.sh"
+        "command": "/absolute/path/to/tokenguard-saas/hooks/pre_tool_use.sh"
       }]
     }]
   }
@@ -64,17 +64,14 @@ claude --plugin-dir /absolute/path/to/loop-stop-retail/claude-plugin
 ## Verify hook
 
 ```bash
-export CLAUDE_PLUGIN_ROOT=/absolute/path/to/loop-stop-retail/claude-plugin
+export CLAUDE_PLUGIN_ROOT=/absolute/path/to/tokenguard-saas/claude-plugin
 echo '{"tool_name":"Read","tool_input":{"path":"/tmp/x.py"}}' | \
   "$CLAUDE_PLUGIN_ROOT/scripts/pre_tool_use.sh"
 # exit 0 = allow; exit 2 = block (reason on stderr). Repeating the same Read ≥ N times blocks.
 ```
 
-## Dashboard
+## Optional SaaS dashboard (not required for Claude)
 
-The plugin hook does not start the Impact dashboard. For charts:
+Hosted impact charts: https://tokenguard-saas.onrender.com — sign up later if you want. Claude protection does **not** need that URL.
 
-```bash
-cd /path/to/loop-stop-retail && ./run.sh
-# open http://127.0.0.1:8788/
-```
+OpenAI-compatible / Cursor clients that cannot use PreToolUse may still point `base_url` at the hosted proxy — that path is secondary/advanced.

@@ -1,15 +1,15 @@
 {
-  "name": "loop-stop-marketplace",
+  "name": "tokenguard-marketplace",
   "version": "0.1.0",
-  "description": "Sibling marketplace folder for Loop Stop. Prefer adding the retail repo root instead when possible.",
+  "description": "Sibling marketplace folder for TokenGuard. Prefer adding the GitHub repo root (labourchef-star/tokenguard-saas) instead.",
   "owner": {
-    "name": "Loop Stop"
+    "name": "TokenGuard"
   },
   "plugins": [
     {
-      "name": "loop-stop",
-      "source": "./../claude-plugin",
-      "description": "Stops sticky coding-agent tool loops before they burn tokens (PreToolUse hook).",
+      "name": "tokenguard",
+      "source": "./plugins/tokenguard",
+      "description": "TokenGuard PreToolUse hook — blocks sticky tool loops. No base_url required.",
       "version": "0.1.0"
     }
   ]

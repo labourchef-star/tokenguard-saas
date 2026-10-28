@@ -1,8 +1,8 @@
 {
-  "name": "loop-stop",
+  "name": "tokenguard",
   "version": "0.1.0",
-  "description": "Stops sticky coding-agent tool loops (repeated reads, failing bash, ping-pong) before they burn tokens. PreToolUse hook; pairs with the local Loop Stop dashboard.",
+  "description": "TokenGuard — stops sticky coding-agent tool loops (repeated reads, failing bash, ping-pong) before they burn tokens. Local PreToolUse hook; no base_url or proxy config required.",
   "author": {
-    "name": "Loop Stop"
+    "name": "TokenGuard"
   }
 }

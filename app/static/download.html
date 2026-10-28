@@ -2,17 +2,65 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta http-equiv="refresh" content="0;url=/signup" />
-  <title>TokenGuard — Sign up</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Install TokenGuard — Claude Code</title>
   <link rel="stylesheet" href="/static/styles.css" />
 </head>
 <body>
-  <main class="auth-page">
-    <div class="panel auth-box wide">
-      <h1>TokenGuard is hosted</h1>
-      <p class="muted">No zip download needed. Sign up to get your base_url and API key.</p>
-      <a class="btn primary" href="/signup">Sign up — get base URL</a>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="/">TokenGuard</a>
+      <nav class="topnav">
+        <a href="/">Home</a>
+        <a href="/integrations">Integrations</a>
+        <a class="btn" href="/signin">Sign in</a>
+        <a class="btn primary" href="/signup">Sign up</a>
+      </nav>
     </div>
+  </header>
+
+  <main class="wrap" style="padding-top:28px;max-width:720px;">
+    <p class="eyebrow">Claude Code · one command</p>
+    <h1>Install TokenGuard</h1>
+    <p class="lead muted">
+      Local PreToolUse hook. <strong>No base_url</strong>, no proxy pointing, no
+      <span class="mono">ANTHROPIC_BASE_URL</span>.
+    </p>
+
+    <div class="panel" style="margin:20px 0;">
+      <strong>Primary — Claude Code session</strong>
+      <pre style="margin-top:12px;white-space:pre-wrap;">/plugin install tokenguard --marketplace labourchef-star/tokenguard-saas</pre>
+      <strong style="display:block;margin-top:16px;">Or from your shell</strong>
+      <pre style="margin-top:12px;white-space:pre-wrap;">claude plugin install tokenguard --marketplace labourchef-star/tokenguard-saas</pre>
+      <p class="muted fine" style="margin-top:12px;">
+        Installs the hook from the GitHub marketplace. Sticky Read/Bash loops get blocked locally.
+      </p>
+    </div>
+
+    <div class="panel" style="margin-bottom:20px;">
+      <strong>Optional — SaaS dashboard</strong>
+      <p class="muted">Want impact charts later? Sign up on the hosted app. Not required for Claude protection.</p>
+      <div class="cta-row">
+        <a class="btn" href="/signup">Sign up for dashboard</a>
+        <a class="btn good" href="/app?demo=1">Try simulated demo</a>
+      </div>
+    </div>
+
+    <details class="panel">
+      <summary><strong>Advanced — Cursor / OpenAI-compatible (base_url)</strong></summary>
+      <p class="muted" style="margin-top:12px;">
+        Clients without PreToolUse can point an OpenAI-compatible
+        <span class="mono">base_url</span> at the hosted proxy after signup.
+        This is secondary to the Claude plugin path.
+      </p>
+      <a class="btn" href="/signup">Sign up — get base URL</a>
+    </details>
   </main>
+
+  <footer class="site-footer">
+    <div class="wrap muted fine">
+      TokenGuard · <a href="/">Home</a> · see also <span class="mono">INSTALL_CLAUDE.md</span> in the repo
+    </div>
+  </footer>
 </body>
 </html>

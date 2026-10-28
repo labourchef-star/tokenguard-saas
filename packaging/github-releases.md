@@ -27,7 +27,7 @@ Dashboard: http://127.0.0.1:8788/
 
 Claude Code plugin (local marketplace):
   claude plugin marketplace add /path/to/extracted/folder
-  claude plugin install loop-stop@loop-stop-marketplace
+  claude plugin install tokenguard --marketplace labourchef-star/tokenguard-saas
 ```
 
 ## curl | bash (after repo exists)
